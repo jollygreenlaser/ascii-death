@@ -59,6 +59,7 @@ fn HomePage() -> impl IntoView {
     // With create_local_resource it dies on fetch - the "click me" still works
     let deadly_data = create_resource(move || (), |_| async move { kill().await });
 
+    // Not technically needed - will die even if this is an empty div
     view! {
         <h1>"Welcome to Leptos!"</h1>
         <button on:click=on_click>"Click Me: " {count}</button>
