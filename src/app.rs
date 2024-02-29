@@ -49,6 +49,12 @@ pub async fn kill() -> Result<AsciiDeath, ServerFnError> {
     })
 }
 
+#[server]
+pub async fn prekill() -> Result<String, ServerFnError> {
+    // Also causes the same crash. Even just one fewer a doesn't crash. No amount of characters before € will cause a crash on their own.
+    Ok("€aaaaaaaaaaaaaaa".to_string())
+}
+
 #[component]
 fn HomePage() -> impl IntoView {
     let (count, set_count) = create_signal(0);
@@ -57,7 +63,9 @@ fn HomePage() -> impl IntoView {
     // Can be create_resource or create_local_resource
     // With create_resource the page dies on hydration - the "click me" stops working
     // With create_local_resource it dies on fetch - the "click me" still works
-    let deadly_data = create_resource(move || (), |_| async move { kill().await });
+    // let deadly_data = create_resource(move || (), |_| async move { kill().await });
+
+    let deadly_data = create_resource(move || (), |_| async move { prekill().await });
 
     // Not technically needed - will die even if this is an empty div
     view! {
